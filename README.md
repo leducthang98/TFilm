@@ -10,3 +10,4 @@ REDIS_PORT = '6379'<br/>
 REDIS_URL = '127.0.0.1'<br/>
 
 JWT_SECRET = 'thangdeptrai'<br/>
+

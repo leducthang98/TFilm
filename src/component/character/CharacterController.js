@@ -33,6 +33,6 @@ export const updateCharacter = async (req, res, next) => {
 }
 
 export const searchCharacter = async (req, res, next) => {
-    const response = await searchCharacterDAL(req?.query?.searchData);
+    const response = await searchCharacterDAL(req?.query?.searchData, req?.limit, req?.offset, req?.page, req?.size);
     res.send(commonResponse(response))
 }

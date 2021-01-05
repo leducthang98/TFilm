@@ -11,8 +11,8 @@ import multer from 'multer';
 import { commonResponse } from './util/ResponseForm';
 import { jwtFilter } from './middleware/Authenticate';
 
-const maxSize = 2 * 1024 * 1024;
-
+// multer 
+const maxSizeImageUpload = 2 * 1024 * 1024;
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'media')
@@ -24,7 +24,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({
   storage: storage,
-  limits: { fileSize: maxSize },
+  limits: { fileSize: maxSizeImageUpload },
 })
 
 const expressApp = express();

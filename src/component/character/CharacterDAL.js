@@ -112,13 +112,42 @@ export const updateCharacterDAL = async (id, data) => {
 
 }
 
-export const searchCharacterDAL = async (searchData) => {
+export const searchCharacterDAL = async (searchData, limit, offset, page, size) => {
     let sql = 'select * from `character` where 1 = 1';
     let params = []
     if (searchData) {
         sql += ' and lower(name) like ?';
         params.push('%' + searchData.toLowerCase() + '%');
     }
+    params.push(limit)
+    params.push(offset)
+    sql += ' limit ? offset ?';
     const result = await dbUtil.query(sql, params);
-    return result;
+
+    let countSql = 'select count(id) as count from `character` where 1 = 1';
+    let paramsCount = []
+    if (searchData) {
+        countSql += ' and lower(name) like ?';
+        paramsCount.push('%' + searchData.toLowerCase() + '%');
+    }
+    let totalRecordResponse = await dbUtil.queryOne(countSql, paramsCount);
+    let count = totalRecordResponse.count
+    let totalPage = 0;
+    if (count % limit == 0) {
+        totalPage = count / limit
+    } else {
+        totalPage = (count / limit) + 1
+    }
+
+    const finalResult = {
+        data: result,
+        pagination: {
+            size: size,
+            page: page,
+            totalPage: parseInt(totalPage),
+            totalRecord: count
+        }
+    }
+    
+    return finalResult;
 }

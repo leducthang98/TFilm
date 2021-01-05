@@ -10,13 +10,13 @@ const router = Router();
 
 router.post('/create', jwtFilter, controllerHandler(createCharacter));
 
-router.get('/all', jwtFilter, pagination(0, 10), controllerHandler(getAllCharacter));
+router.get('/all', jwtFilter, pagination(1, 10), controllerHandler(getAllCharacter));
 
 router.delete('/:id', jwtFilter, controllerHandler(deleteCharacter));
 
 router.put('/:id', jwtFilter, controllerHandler(updateCharacter));
 
-router.get('/search', jwtFilter, controllerHandler(searchCharacter));
+router.get('/search', jwtFilter, pagination(1, 10), controllerHandler(searchCharacter));
 
 
 

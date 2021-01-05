@@ -1,6 +1,6 @@
 import AuthRouter from './auth/AuthRouter';
 import CharacterRouter from './character/CharacterRouter';
-import DefaultRouter from './Default/DefaultRouter';
+import DefaultRouter from './default/DefaultRouter';
 
 export default [
     DefaultRouter,

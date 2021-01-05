@@ -7,9 +7,9 @@ export const getUserByUsername = async (username, password) => {
     return result;
 }
 
-export const createNewAccount = async (username, password, email) => {
+export const createNewAccount = async (username, password) => {
     let uuid = uuidv4();
-    const sql = 'insert into account (id, username, password) values (?, ?, ?)';
-    const result = await dbUtil.query(sql, [uuid, username, password]);
+    const sql = 'insert into account (id, username, password, role) values (?, ?, ?, ?)';
+    const result = await dbUtil.query(sql, [uuid, username, password, 'user']);
     return result;
 }

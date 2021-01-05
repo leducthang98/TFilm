@@ -17,7 +17,7 @@ export const errorHandler = (error, req, res, next) => {
     let code = -1;
     let message = 'unknown-error';
     if (error.status >= 400 && error.status <= 499) {
-      code = 1;
+      code = 0;
       message = 'client-error';
     } else {
       console.log(error)

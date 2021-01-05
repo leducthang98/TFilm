@@ -9,6 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import multer from 'multer';
 import { commonResponse } from './util/ResponseForm';
+import { jwtFilter } from './middleware/Authenticate';
 
 const maxSize = 2 * 1024 * 1024;
 
@@ -47,7 +48,7 @@ for (const router of routers) {
   expressApp.use(router.path, router.router)
 }
 
-expressApp.post('/upload/photo', upload.single('image'), (req, res, next) => {
+expressApp.post('/upload/photo', jwtFilter, upload.single('image'), (req, res, next) => {
   const file = req.file
   if (!file) {
     const error = new Error('Please upload a file')

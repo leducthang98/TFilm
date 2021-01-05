@@ -1,6 +1,6 @@
 export const STATUS = {
     OK: {
-        CODE: 0,
+        CODE: 1,
         MESSAGE: 'ok'
     },
     SERVER_ERROR: {
@@ -8,7 +8,7 @@ export const STATUS = {
         MESSAGE: 'server-error'
     },
     CLIENT_ERROR: {
-        CODE: 1,
+        CODE: 0,
         MESSAGE: 'client-error'
     },
     UNKNOWN_ERROR: {

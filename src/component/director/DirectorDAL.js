@@ -58,16 +58,60 @@ export const updateDirectorDAL = async (id, data) => {
     }
     if (data.dob) {
         updatePart += ', dob = ?';
-        params.push(data.dob)
+        params.push(moment(data.dob).format('YYYY-MM-DD'))
     }
     if (data.description) {
         updatePart += ', description = ?';
         params.push(data.description)
     }
+
+    updatePart += ', updated_at = ?';
+    params.push(moment().format('YYYY-MM-DD hh:mm:ss'));
+    
     let conditionPart = ' where id = ?';
     params.push(id)
     let sql = updatePart + conditionPart
     // name, dob, description
     const result = await dbUtil.query(sql, params);
     return result;
+}
+
+export const searchDirectorDAL = async (searchData, limit, offset, page, size) => {
+    let sql = 'select * from `director` where deleted = 0';
+    let params = []
+    if (searchData) {
+        sql += ' and lower(name) like ?';
+        params.push('%' + searchData.toLowerCase() + '%');
+    }
+    params.push(limit)
+    params.push(offset)
+    sql += ' limit ? offset ?';
+    const result = await dbUtil.query(sql, params);
+
+    let countSql = 'select count(id) as count from `director` where deleted = 0';
+    let paramsCount = []
+    if (searchData) {
+        countSql += ' and lower(name) like ?';
+        paramsCount.push('%' + searchData.toLowerCase() + '%');
+    }
+    let totalRecordResponse = await dbUtil.queryOne(countSql, paramsCount);
+    let count = totalRecordResponse.count
+    let totalPage = 0;
+    if (count % limit == 0) {
+        totalPage = count / limit
+    } else {
+        totalPage = (count / limit) + 1
+    }
+
+    const finalResult = {
+        data: result,
+        pagination: {
+            size: size,
+            page: page,
+            totalPage: parseInt(totalPage),
+            totalRecord: count
+        }
+    }
+
+    return finalResult;
 }

@@ -76,7 +76,7 @@ export const updateCharacterDAL = async (id, data) => {
 
     if (data.dob) {
         updatePart += ', dob = ?';
-        params.push(data.dob)
+        params.push(moment(data.dob).format('YYYY-MM-DD'))
     }
 
     if (data.gender) {
@@ -113,7 +113,7 @@ export const updateCharacterDAL = async (id, data) => {
 }
 
 export const searchCharacterDAL = async (searchData, limit, offset, page, size) => {
-    let sql = 'select * from `character` where 1 = 1';
+    let sql = 'select * from `character` where deleted = 0';
     let params = []
     if (searchData) {
         sql += ' and lower(name) like ?';
@@ -124,7 +124,7 @@ export const searchCharacterDAL = async (searchData, limit, offset, page, size) 
     sql += ' limit ? offset ?';
     const result = await dbUtil.query(sql, params);
 
-    let countSql = 'select count(id) as count from `character` where 1 = 1';
+    let countSql = 'select count(id) as count from `character` where deleted = 0';
     let paramsCount = []
     if (searchData) {
         countSql += ' and lower(name) like ?';

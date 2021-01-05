@@ -1,7 +1,7 @@
 import { commonResponse } from "../../util/ResponseForm";
 import { ERRORS } from '../../constant/Errors';
 import { v4 as uuidv4 } from 'uuid';
-import { createDirectorDAL, deleteDirectorDAL, getAllDirectorDAL, updateDirectorDAL } from "./DirectorDAL";
+import { createDirectorDAL, deleteDirectorDAL, getAllDirectorDAL, updateDirectorDAL, searchDirectorDAL } from "./DirectorDAL";
 
 
 export const createDirector = async (req, res, next) => {
@@ -31,4 +31,9 @@ export const updateDirector = async (req, res, next) => {
         id: req.params.id,
         ...req.body
     }))
+}
+
+export const searchDirector = async (req, res, next) => {
+    const response = await searchDirectorDAL(req?.query?.searchData, req?.limit, req?.offset, req?.page, req?.size);
+    res.send(commonResponse(response))
 }

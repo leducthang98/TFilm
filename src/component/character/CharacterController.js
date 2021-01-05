@@ -1,7 +1,7 @@
 import { commonResponse } from "../../util/ResponseForm";
 import { ERRORS } from '../../constant/Errors';
 import { v4 as uuidv4 } from 'uuid';
-import { createCharacterDAL, deleteCharacterDAL, getAllCharacterDAL, updateCharacterDAL } from "./CharacterDAL";
+import { createCharacterDAL, deleteCharacterDAL, getAllCharacterDAL, searchCharacterDAL, updateCharacterDAL } from "./CharacterDAL";
 
 export const createCharacter = async (req, res, next) => {
     let id = uuidv4();
@@ -14,7 +14,7 @@ export const createCharacter = async (req, res, next) => {
 
 export const getAllCharacter = async (req, res, next) => {
 
-    const response = await getAllCharacterDAL(req?.query?.sortColumn, req?.query?.sortType, req?.limit, req?.offset, req?.page, req?.size);
+    const response = await getAllCharacterDAL(req?.query?.sortColumn, req?.query?.sortType, req?.limit, req?.offset, req?.page, req?.size, req?.query?.gender);
     res.send(commonResponse(response))
 }
 
@@ -30,4 +30,9 @@ export const updateCharacter = async (req, res, next) => {
     res.send(commonResponse({
         updatedCharacterId: req?.params?.id
     }))
+}
+
+export const searchCharacter = async (req, res, next) => {
+    const response = await searchCharacterDAL(req?.query?.searchData);
+    res.send(commonResponse(response))
 }

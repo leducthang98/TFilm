@@ -7,18 +7,24 @@ import moment from 'moment';
 export const createCharacterDAL = async (id, data) => {
     let created_at = moment().format('YYYY-MM-DD hh:mm:ss');
     const sql = 'insert into `character` (id, name, dob, gender, deleted, address, image, description, created_at, updated_at) values (?,?,?,?,?,?,?,?,?,?)';
-    const result = await dbUtil.query(sql, [id, data.name, data.dob, data.gender, 0, data.address, data.image, data.description, created_at, created_at]);
+    const result = await dbUtil.query(sql, [id, data.name, moment(data.dob).format('YYYY-MM-DD hh:mm:ss'), data.gender, 0, data.address, data.image, data.description, created_at, created_at]);
     return result;
 }
 
-export const getAllCharacterDAL = async (sortColumn, sortType, limit, offset, page, size) => {
+export const getAllCharacterDAL = async (sortColumn, sortType, limit, offset, page, size, gender) => {
     if (sortType == 0) {
         sortType = 'DESC'
     } else {
         sortType = 'ASC'
     }
     let sql = 'select * from `character` where deleted = 0'
-    let params = [limit, offset]
+    let params = []
+    if (gender) {
+        sql += ' and gender = ?';
+        params.push(gender)
+    }
+    params.push(limit)
+    params.push(offset)
     if (sortColumn) {
         sql += ' order by ' + sortColumn + ' ' + sortType;
     }
@@ -26,7 +32,12 @@ export const getAllCharacterDAL = async (sortColumn, sortType, limit, offset, pa
     const resultData = await dbUtil.query(sql, params);
 
     let countSql = 'select count(id) as count from `character` where deleted = 0';
-    let totalRecordResponse = await dbUtil.queryOne(countSql);
+    let paramsCount = []
+    if (gender) {
+        countSql += ' and gender = ?';
+        paramsCount.push(gender)
+    }
+    let totalRecordResponse = await dbUtil.queryOne(countSql, paramsCount);
     let count = totalRecordResponse.count
     let totalPage = 0;
     if (count % limit == 0) {
@@ -99,4 +110,15 @@ export const updateCharacterDAL = async (id, data) => {
     const result = await dbUtil.query(sql, params);
     return result;
 
+}
+
+export const searchCharacterDAL = async (searchData) => {
+    let sql = 'select * from `character` where 1 = 1';
+    let params = []
+    if (searchData) {
+        sql += ' and lower(name) like ?';
+        params.push('%' + searchData.toLowerCase() + '%');
+    }
+    const result = await dbUtil.query(sql, params);
+    return result;
 }

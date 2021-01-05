@@ -7,7 +7,7 @@ import moment from 'moment';
 export const createCharacterDAL = async (id, data) => {
     let created_at = moment().format('YYYY-MM-DD hh:mm:ss');
     const sql = 'insert into `character` (id, name, dob, gender, deleted, address, image, description, created_at, updated_at) values (?,?,?,?,?,?,?,?,?,?)';
-    const result = await dbUtil.query(sql, [id, data.name, moment(data.dob).format('YYYY-MM-DD hh:mm:ss'), data.gender, 0, data.address, data.image, data.description, created_at, created_at]);
+    const result = await dbUtil.query(sql, [id, data.name, data.dob ? moment(data.dob).format('YYYY-MM-DD hh:mm:ss') : null, data.gender, 0, data.address, data.image, data.description, created_at, created_at]);
     return result;
 }
 
@@ -148,6 +148,6 @@ export const searchCharacterDAL = async (searchData, limit, offset, page, size) 
             totalRecord: count
         }
     }
-    
+
     return finalResult;
 }

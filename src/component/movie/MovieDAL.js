@@ -43,7 +43,7 @@ export const getAllMovieDAL = async (searchData, category, limit, offset, page, 
     const result = await dbUtil.query(sql, params);
 
     // count
-    let countSql = 'select count(id) as count from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0';
+    let countSql = 'select count(m.id) as count from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0';
     let paramsCount = []
     if (category) {
         countSql += ' and mc.category_id = ?';

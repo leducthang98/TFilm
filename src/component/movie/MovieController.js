@@ -10,7 +10,7 @@ export const createMovie = async (req, res, next) => {
 }
 
 export const getAllMovie = async (req, res, next) => {
-    const response = await getAllMovieDAL(req?.limit, req?.offset, req?.page, req?.size)
+    const response = await getAllMovieDAL(req.query.searchData,req.query.category, req?.limit, req?.offset, req?.page, req?.size)
     res.send(commonResponse(response))
 }
 

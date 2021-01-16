@@ -26,18 +26,33 @@ export const createMovieDAL = async (id, data) => {
     }
 }
 
-export const getAllMovieDAL = async (limit, offset, page, size) => {
-    let sql = 'select * from movie where deleted = 0';
+export const getAllMovieDAL = async (searchData, category, limit, offset, page, size) => {
+    let sql = 'select m.*, mc.category_id,c.category_name from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0;';
     let params = [];
+    if (category) {
+        sql += ' and mc.category_id = ?;';
+        params.push(category)
+    }
+    if (searchData) {
+        sql += ' and lower(name) like ?';
+        params.push('%' + searchData.toLowerCase() + '%');
+    }
     params.push(limit)
     params.push(offset)
     sql += ' limit ? offset ?';
     const result = await dbUtil.query(sql, params);
 
     // count
-
-    let countSql = 'select count(id) as count from `movie` where deleted = 0';
+    let countSql = 'select count(id) as count from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0;';
     let paramsCount = []
+    if (category) {
+        countSql += ' and mc.category_id = ?;';
+        paramsCount.push(category)
+    }
+    if (searchData) {
+        countSql += ' and lower(name) like ?';
+        paramsCount.push('%' + searchData.toLowerCase() + '%');
+    }
     let totalRecordResponse = await dbUtil.queryOne(countSql, paramsCount);
     let count = totalRecordResponse.count
     let totalPage = 0;

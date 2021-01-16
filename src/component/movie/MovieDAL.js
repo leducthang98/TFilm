@@ -3,13 +3,27 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 
 export const createMovieDAL = async (id, data) => {
-    // add category
-    let created_at = moment().format('YYYY-MM-DD hh:mm:ss');
-    //id, name, desc, img, create_at, update_at, deleted, director_id, link_movie
-    const sql = 'insert into `movie` (id, name, description, image, created_at, updated_at, deleted, director_id, link_movie) values (?,?,?,?,?,?,?,?,?)';
-    const result = await dbUtil.query(sql, [id, data.name, data.description, data.image, created_at, created_at, 0, data.directorId, data.linkMovie]);
-
-    return result;
+    const transaction = await dbUtil.beginTransaction();
+    try {
+        let created_at = moment().format('YYYY-MM-DD hh:mm:ss');
+        const sql = 'insert into `movie` (id, name, description, image, created_at, updated_at, deleted, director_id, link_movie) values (?,?,?,?,?,?,?,?,?)';
+        await dbUtil.executeInTransaction(sql, [id, data.name, data.description, data.image, created_at, created_at, 0, data.directorId, data.linkMovie]).catch(err => {
+            throw err;
+        })
+        for (let i = 0; i < data.category.length; i++) {
+            let categoryTemp = data.category[i];
+            let movieCategoryId = uuidv4();
+            let addCategoryMovieSql = 'insert into `movie_category` (id, movie_id, category_id) values (?,?,?)';
+            await dbUtil.executeInTransaction(addCategoryMovieSql, [movieCategoryId, id, categoryTemp]).catch(err => {
+                throw err;
+            })
+        }
+        await dbUtil.commitTransaction(transaction);
+        return true;
+    } catch (e) {
+        await dbUtil.rollbackTransaction(transaction);
+        return e;
+    }
 }
 
 export const getAllMovieDAL = async (limit, offset, page, size) => {

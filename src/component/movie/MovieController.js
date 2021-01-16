@@ -6,10 +6,7 @@ import { createMovieDAL, getAllMovieDAL, getCategoriesOfMovieDAL, getSeasonOfMov
 export const createMovie = async (req, res, next) => {
     let id = uuidv4();
     const response = await createMovieDAL(id, req.body)
-    res.send(commonResponse({
-        id: id,
-        ...req.body
-    }))
+    res.send(commonResponse(response))
 }
 
 export const getAllMovie = async (req, res, next) => {

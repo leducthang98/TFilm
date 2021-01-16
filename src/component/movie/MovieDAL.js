@@ -27,10 +27,10 @@ export const createMovieDAL = async (id, data) => {
 }
 
 export const getAllMovieDAL = async (searchData, category, limit, offset, page, size) => {
-    let sql = 'select m.*, mc.category_id,c.category_name from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0;';
+    let sql = 'select m.*, mc.category_id,c.category_name from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0';
     let params = [];
     if (category) {
-        sql += ' and mc.category_id = ?;';
+        sql += ' and mc.category_id = ?';
         params.push(category)
     }
     if (searchData) {
@@ -43,10 +43,10 @@ export const getAllMovieDAL = async (searchData, category, limit, offset, page, 
     const result = await dbUtil.query(sql, params);
 
     // count
-    let countSql = 'select count(id) as count from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0;';
+    let countSql = 'select count(id) as count from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0';
     let paramsCount = []
     if (category) {
-        countSql += ' and mc.category_id = ?;';
+        countSql += ' and mc.category_id = ?';
         paramsCount.push(category)
     }
     if (searchData) {

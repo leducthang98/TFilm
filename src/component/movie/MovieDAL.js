@@ -46,9 +46,6 @@ export const createMovieDAL = async (id, movieType, data) => {
     }
 }
 
-export const getAllSingleMovieDAL = async () => {
-
-}
 
 export const getAllMovieDAL = async (searchData, category, movieType, limit, offset, page, size) => {
     let sql = 'select m.*, mc.category_id,c.category_name from `movie` m LEFT JOIN `movie_category` mc on m.id = mc.movie_id INNER JOIN `category` c on c.id = mc.category_id where m.deleted = 0';
@@ -86,7 +83,7 @@ export const getAllMovieDAL = async (searchData, category, movieType, limit, off
     }
 
     if (movieType) {
-        if (movieType = 'series') {
+        if (movieType == 'series') {
             countSql += ' and single_episode = 2';
         } else {
             countSql += ' and single_episode = 1';

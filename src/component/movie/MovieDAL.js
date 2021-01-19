@@ -164,3 +164,30 @@ export const updateCategoryForMovieDAL = async (movieId, categoriesId) => {
     }
 }
 
+export const getDetailSingleMovieDAL = async (movieId) => {
+    //, , ,  comment
+    let sql = 'select m.id,m.name, m.description, m.link_trailer,m.single_episode,d.name as director_name, d.dob as director_dob, e.url as link_movie, e.id as episode_id from movie m LEFT JOIN director d on m.director_id = d.id  LEFT JOIN season s on m.id = s.movie_id LEFT JOIN episode e on s.id = e.season_id WHERE m.deleted = 0 and m.id = ?';
+    let result = await dbUtil.queryOne(sql, [movieId]);
+    if (result.single_episode != 1) {
+        throw 'Không phải phim lẻ';
+    } else {
+        // get rate
+        let getRateSql = 'SELECT AVG(mark) as rate from rate WHERE movie_id = ?';
+        let rateResult = await dbUtil.queryOne(getRateSql, [movieId]);
+        let rate = rateResult.rate
+        // get actors from eps
+        let episodeId = result.episode_id;
+        let getCharacterSql = 'SELECT c.* from character_episode ce LEFT JOIN `character` c on ce.character_id = c.id WHERE episode_id = ?';
+        let characters = await dbUtil.query(getCharacterSql, [episodeId]);
+        // get comments
+        let getCommentSql = 'SELECT  a.username,a.first_name,a.last_name,c.content from `comment` c LEFT JOIN account a on c.account_id = a.id WHERE c.episode_id = ? ORDER BY c.created_at DESC';
+        let comments = await dbUtil.query(getCommentSql, [episodeId]);
+        result = {
+            ...result,
+            rate: rate,
+            characters: characters,
+            comments: comments
+        }
+        return result
+    }
+}

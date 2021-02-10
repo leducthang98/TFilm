@@ -1,6 +1,7 @@
 import AuthRouter from './auth/AuthRouter';
 import CategoryRouter from './category/CategoryRouter';
 import CharacterRouter from './character/CharacterRouter';
+import CommentRouter from './comment/CommentRouter';
 import DefaultRouter from './default/DefaultRouter';
 import DirectorRouter from './director/DirectorRouter';
 import MovieRouter from './movie/MovieRouter';
@@ -15,5 +16,6 @@ export default [
     DirectorRouter,
     MovieRouter,
     SeasonRouter,
-    CategoryRouter
+    CategoryRouter,
+    CommentRouter
 ]

@@ -180,7 +180,7 @@ export const getDetailSingleMovieDAL = async (movieId) => {
         let getCharacterSql = 'SELECT c.* from character_episode ce LEFT JOIN `character` c on ce.character_id = c.id WHERE episode_id = ?';
         let characters = await dbUtil.query(getCharacterSql, [episodeId]);
         // get comments
-        let getCommentSql = 'SELECT  a.username,a.first_name,a.last_name,c.content from `comment` c LEFT JOIN account a on c.account_id = a.id WHERE c.episode_id = ? ORDER BY c.created_at DESC';
+        let getCommentSql = 'SELECT  c.id, a.username,a.first_name,a.last_name,c.content from `comment` c LEFT JOIN account a on c.account_id = a.id WHERE c.episode_id = ? and c.deleted = 0 ORDER BY c.created_at DESC';
         let comments = await dbUtil.query(getCommentSql, [episodeId]);
         result = {
             ...result,

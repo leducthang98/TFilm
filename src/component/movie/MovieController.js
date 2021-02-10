@@ -39,11 +39,8 @@ export const delCharacter = async (req, res, next) => {
 }
 
 export const createCharacter = async (req, res, next) => {
-
-
     const response = await createCharacterMovieDAL(req.body)
     res.send(commonResponse({
-
         ...req.body,
     }))
 }

@@ -33,9 +33,7 @@ var loggerStream = fs.createWriteStream(path.join(__dirname, '../system.log'), {
 
 expressApp.use(morgan('combined', { stream: loggerStream }))
 expressApp.use(morgan('dev'))
-
 expressApp.use(corsMiddleware);
-
 expressApp.use(bodyParser.json({
   limit: '50mb'
 }));

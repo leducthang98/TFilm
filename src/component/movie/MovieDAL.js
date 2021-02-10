@@ -193,15 +193,24 @@ export const getDetailSingleMovieDAL = async (movieId) => {
 }
 
 export const delCharacterMovieDAL = async (characterId) => {
-    let delCharacterSql = 'delete   from  leducthang.character where  id = ?';
+    let delCharacterSql = 'delete   from character_episode  where  id = ?';
     let delResult = await dbUtil.queryOne(delCharacterSql, [characterId]);
     return delResult
 }
 
 export const createCharacterMovieDAL = async (data) => {
-    const createCharacterSql = 'insert into `character_episode` (  character_id, episode_id ) values ( ?,?)';
-    const result = await dbUtil.query(createCharacterSql, [data.character_id, data.episode_id]);
-    console.log(result);
+    const checkExistSql = 'select * from `character_episode` where character_id=? and episode_id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.character_id, data.episode_id])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+    let result = null;
+    if (length < 1) {
+        const createCharacterSql = 'insert into `character_episode` (  character_id, episode_id ) values ( ?,?)';
+        result = await dbUtil.query(createCharacterSql, [data.character_id, data.episode_id]);
+        console.log(result);
+    } else {
+        throw Error('Đã là diễn viên của phim')
+    }
     return result;
 
 }

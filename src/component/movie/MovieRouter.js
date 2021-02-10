@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { jwtFilter } from '../../middleware/Authenticate';
 import { controllerHandler } from '../../middleware/ErrorHandler';
 import { pagination } from '../../middleware/Pagination';
-import { createMovie, getAllMovie, getDetailSingleMovie, getMovieCategories, getSeasonOfMovie, updateCategoryForMovie } from './MovieController';
+import { createCharacter, createMovie, delCharacter, getAllMovie, getDetailSingleMovie, getMovieCategories, getSeasonOfMovie, updateCategoryForMovie } from './MovieController';
 
 const path = '/movie';
 const router = Router();
@@ -16,6 +16,10 @@ router.get('/seasons', jwtFilter, controllerHandler(getSeasonOfMovie));
 router.put('/update-categories', jwtFilter, controllerHandler(updateCategoryForMovie));
 
 router.get('/categories', jwtFilter, controllerHandler(getMovieCategories));
+
+router.delete('/single/character', jwtFilter, controllerHandler(delCharacter));
+
+router.post('/single/new-character', jwtFilter, controllerHandler(createCharacter));
 
 router.get('/single/:id', jwtFilter, controllerHandler(getDetailSingleMovie));
 

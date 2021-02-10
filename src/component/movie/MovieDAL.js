@@ -191,3 +191,17 @@ export const getDetailSingleMovieDAL = async (movieId) => {
         return result
     }
 }
+
+export const delCharacterMovieDAL = async (characterId) => {
+    let delCharacterSql = 'delete   from  leducthang.character where  id = ?';
+    let delResult = await dbUtil.queryOne(delCharacterSql, [characterId]);
+    return delResult
+}
+
+export const createCharacterMovieDAL = async (data) => {
+    const createCharacterSql = 'insert into `character_episode` (  character_id, episode_id ) values ( ?,?)';
+    const result = await dbUtil.query(createCharacterSql, [data.character_id, data.episode_id]);
+    console.log(result);
+    return result;
+
+}

@@ -1,7 +1,7 @@
 import { commonResponse } from "../../util/ResponseForm";
 import { ERRORS } from '../../constant/Errors';
 import { v4 as uuidv4 } from 'uuid';
-import { createMovieDAL, getAllMovieDAL, getCategoriesOfMovieDAL, getDetailSingleMovieDAL, getSeasonOfMovieDAL, updateCategoryForMovieDAL } from "./MovieDAL";
+import { createCharacterMovieDAL, createMovieDAL, delCharacterMovieDAL, getAllMovieDAL, getCategoriesOfMovieDAL, getDetailSingleMovieDAL, getSeasonOfMovieDAL, updateCategoryForMovieDAL } from "./MovieDAL";
 
 export const createMovie = async (req, res, next) => {
     let id = uuidv4();
@@ -31,4 +31,19 @@ export const getMovieCategories = async (req, res, next) => {
 export const getDetailSingleMovie = async (req, res, next) => {
     const response = await getDetailSingleMovieDAL(req?.params?.id)
     res.send(commonResponse(response))
+}
+
+export const delCharacter = async (req, res, next) => {
+    const response = await delCharacterMovieDAL(req?.query?.id)
+    res.send(commonResponse(response))
+}
+
+export const createCharacter = async (req, res, next) => {
+
+
+    const response = await createCharacterMovieDAL(req.body)
+    res.send(commonResponse({
+
+        ...req.body,
+    }))
 }

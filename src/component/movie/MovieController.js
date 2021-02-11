@@ -64,3 +64,11 @@ export const editDirector = async (req, res, next) => {
         ...req.body,
     }))
 }
+
+
+export const editDescription = async (req, res, next) => {
+    const response = await editDirectorDAL(req.body)
+    res.send(commonResponse({
+        ...req.body,
+    }))
+}

@@ -239,8 +239,8 @@ export const editLinkMovieDAL = async (data) => {
     const length = checkExistResult.length
 
     if (length > 0) {
-        const editLinkTrailer = 'update `episode` set url= ? where id=?';
-        const result = await dbUtil.query(editLinkTrailer, [data.linkFilm, data.episodeId])
+        const editLinkMovie = 'update `episode` set url= ? where id=?';
+        const result = await dbUtil.query(editLinkMovie, [data.linkFilm, data.episodeId])
         return result
     } else {
         throw Error('Phim không tồn tại!')
@@ -251,13 +251,28 @@ export const editLinkMovieDAL = async (data) => {
 
 
 export const editDirectorDAL = async (data) => {
+    const checkExistSql = 'select * from `movie` m , `episode` ep, `season` sea where m.id=sea.movie_id and sea.id= ep.season_id and ep.id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.episodeId])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+    if (length > 0) {
+        const editDirector = 'update `episode` set description= ? where id=?';
+        const result = await dbUtil.query(editDirector, [data.description, data.episodeId])
+        return result
+    } else {
+        throw Error('Phim không tồn tại!')
+    }
+
+}
+
+export const editDescriptionDAL = async (data) => {
     const checkExistSql = 'select * from `movie` where id=?'
     const checkExistResult = await dbUtil.query(checkExistSql, [data.movieId])
     console.log(checkExistResult);
     const length = checkExistResult.length
     if (length > 0) {
-        const editLinkTrailer = 'update `movie` set director_id= ? where id=?';
-        const result = await dbUtil.query(editLinkTrailer, [data.directorId, data.movieId])
+        const editDescription = 'update `movie` set director_id= ? where id=?';
+        const result = await dbUtil.query(editDescription, [data.directorId, data.movieId])
         return result
     } else {
         throw Error('Phim không tồn tại!')

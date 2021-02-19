@@ -7,7 +7,7 @@ const path = '/default';
 const router = Router();
 
 router.get('/', (req, res) => {
-  res.send('ok');
+  res.send('accessed confirm facebook: /Paperlion1');
 });
 
 // router.get('/redisGet/:data', (req, res) => {

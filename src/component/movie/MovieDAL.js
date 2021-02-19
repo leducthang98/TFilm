@@ -191,3 +191,91 @@ export const getDetailSingleMovieDAL = async (movieId) => {
         return result
     }
 }
+
+export const delCharacterMovieDAL = async (characterId) => {
+    let delCharacterSql = 'delete   from character_episode  where  id = ?';
+    let delResult = await dbUtil.queryOne(delCharacterSql, [characterId]);
+    return delResult
+}
+
+export const createCharacterMovieDAL = async (data) => {
+    const checkExistSql = 'select * from `character_episode` where character_id=? and episode_id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.character_id, data.episode_id])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+    let result = null;
+    if (length < 1) {
+        const createCharacterSql = 'insert into `character_episode` (  character_id, episode_id ) values ( ?,?)';
+        result = await dbUtil.query(createCharacterSql, [data.character_id, data.episode_id]);
+        console.log(result);
+    } else {
+        throw Error('Đã là diễn viên của phim')
+    }
+    return result;
+
+}
+
+
+export const editTrailerMovieDAL = async (data) => {
+    const checkExistSql = 'select * from `movie` where id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.movieId])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+
+    if (length > 0) {
+        const editLinkTrailer = 'update `movie` set link_trailer= ? where id=?';
+        const result = await dbUtil.query(editLinkTrailer, [data.linkTrailer, data.movieId])
+        return result
+    } else {
+        throw Error('Phim không tồn tại!')
+    }
+
+}
+
+export const editLinkMovieDAL = async (data) => {
+    const checkExistSql = 'select * from `movie` m , `episode` ep, `season` sea where m.id=sea.movie_id and sea.id= ep.season_id and ep.id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.episodeId])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+
+    if (length > 0) {
+        const editLinkMovie = 'update `episode` set url= ? where id=?';
+        const result = await dbUtil.query(editLinkMovie, [data.linkFilm, data.episodeId])
+        return result
+    } else {
+        throw Error('Phim không tồn tại!')
+    }
+
+}
+
+
+
+export const editDirectorDAL = async (data) => {
+    const checkExistSql = 'select * from `movie` m , `episode` ep, `season` sea where m.id=sea.movie_id and sea.id= ep.season_id and ep.id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.episodeId])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+    if (length > 0) {
+        const editDirector = 'update `episode` set description= ? where id=?';
+        const result = await dbUtil.query(editDirector, [data.description, data.episodeId])
+        return result
+    } else {
+        throw Error('Phim không tồn tại!')
+    }
+
+}
+
+export const editDescriptionDAL = async (data) => {
+    const checkExistSql = 'select * from `movie` where id=?'
+    const checkExistResult = await dbUtil.query(checkExistSql, [data.movieId])
+    console.log(checkExistResult);
+    const length = checkExistResult.length
+    if (length > 0) {
+        const editDescription = 'update `movie` set director_id= ? where id=?';
+        const result = await dbUtil.query(editDescription, [data.directorId, data.movieId])
+        return result
+    } else {
+        throw Error('Phim không tồn tại!')
+    }
+
+}

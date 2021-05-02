@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  tfilm:
+    build: .
+    ports:
+        - "3110:3110"
+    restart: always 
